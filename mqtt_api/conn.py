@@ -5,14 +5,20 @@ from functools import wraps
 
 def on_connect(client, mqtt_api, flags, rc):
     print("Connected with result code "+str(rc))
-    for topic, callback in mqtt_api.routes.items():
+    for topic, route in mqtt_api.routes.items():
         client.subscribe(topic)
 
 def on_message(client, mqtt_api, msg):
-    for topic in mqtt_api.routes.keys():
+    for topic, route in mqtt_api.routes.items():
         if mqtt.topic_matches_sub(topic, msg.topic):
-            mqtt_api.routes[topic](msg)
+            route.func(msg)
 
+
+class Route(object):
+    def __init__(self, topic, func, qos=2):
+        self.topic = topic
+        self.func = func
+        self.qos = qos
 
 class MqttApi(object):
     def __init__(self, mqtt_client):
@@ -27,9 +33,10 @@ class MqttApi(object):
         self.mqtt_client.on_message = on_message
 
 
-    def route(self, route_path):
+    def route(self, route_path, qos=2):
         def decorator(callback_function):
-            self.routes[route_path] = callback_function
+            route = Route(route_path, callback_function, qos=qos)
+            self.routes[route_path] = route
         return decorator
     
 
