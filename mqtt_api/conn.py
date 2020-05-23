@@ -2,6 +2,7 @@
 import paho.mqtt.client as mqtt
 from functools import wraps
 
+from .route import Route
 
 def on_connect(client, mqtt_api, flags, rc):
     print("Connected with result code "+str(rc))
@@ -13,12 +14,6 @@ def on_message(client, mqtt_api, msg):
         if mqtt.topic_matches_sub(topic, msg.topic):
             route.func(msg)
 
-
-class Route(object):
-    def __init__(self, topic, func, qos=2):
-        self.topic = topic
-        self.func = func
-        self.qos = qos
 
 class MqttApi(object):
     def __init__(self, mqtt_client):
