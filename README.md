@@ -15,8 +15,12 @@ mqttc = mqtt.Client(clean_session=True)
 app = MqttApi(mqttc)
 
 
+@app.route("$SYS/broker/<type>")
+def broker_url_params(msg):
+    print("---broker_url_params", msg.topic, msg.payload)
+
 @app.route("$SYS/broker/+")
-def broker_multi(msg):
+def broker_multi(msg,):
     print("---broker_multi", msg.topic, msg.payload)
 
 @app.route("$SYS/broker/version")

@@ -31,7 +31,8 @@ class MqttApi(object):
     def route(self, route_path, qos=2):
         def decorator(callback_function):
             route = Route(route_path, callback_function, qos=qos)
-            self.routes[route_path] = route
+            self.routes[route.topic] = route
+            print(route)
         return decorator
     
 
