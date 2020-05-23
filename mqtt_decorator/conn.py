@@ -15,9 +15,15 @@ def on_message(client, mqtt_api, msg):
             route.exec(msg)
 
 
-class MqttApi(object):
+class MqttDecorator(object):
     def __init__(self, mqtt_client):
+        """Mqtt Decorator is the class which convert mqtt
+        subscriptions to a Flask like api. 
 
+        Arguments:
+            mqtt_client {paho.mqtt.client.Client} -- [description]
+        """
+        print(type(mqtt_client))
         # init routes
         self.routes = {}
 
