@@ -1,10 +1,10 @@
-# mqtt_api
-mqtt_api is a decorator module which converts mqtt subscriptions and messages to a flask like api.
+# mqtt_decorator
+mqtt_decorator is a decorator module which converts mqtt subscriptions and messages to a [Flask](https://flask.palletsprojects.com/en/1.1.x/) like api.
 
-Example: 
+### Demo
 
 ```python
-from mqtt_api import MqttApi
+from mqttdecorator import MqttDecorator
 import paho.mqtt.client as mqtt
 
 # you can specify all 
@@ -12,7 +12,7 @@ import paho.mqtt.client as mqtt
 # such as websocket connections or
 # tls connections
 mqttc = mqtt.Client(clean_session=True)
-app = MqttApi(mqttc)
+app = MqttDecorator(mqttc)
 
 @app.route("$SYS/<broker>/<type>")
 def broker_url_params(msg, broker, type):
@@ -33,3 +33,25 @@ if __name__ == "__main__":
     app.run( "mqtt.eclipse.org", 1883 )
 
 ```
+
+### Installing
+
+
+### Development
+
+
+### Deployment
+
+```
+pip install -e .
+```
+
+### Licence
+
+
+### Acknowledges
+This package is developed using
+- Python <3
+- Paho-Mqtt
+Heavily inspired from
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/)

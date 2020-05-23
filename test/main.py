@@ -1,6 +1,6 @@
 
 
-from mqtt_api import MqttApi
+from mqtt_decorator import MqttDecorator
 import paho.mqtt.client as mqtt
 
 # you can specify all 
@@ -8,14 +8,14 @@ import paho.mqtt.client as mqtt
 # such as websocket connections or
 # tls connections
 mqttc = mqtt.Client(clean_session=True)
-app = MqttApi(mqttc)
+app = MqttDecorator(mqttc)
 
 @app.route("$SYS/<broker>/<type>")
 def broker_url_params(msg, broker, type):
     print("---broker_url_params", broker, msg.topic)
 
 @app.route("$SYS/broker/version")
-def version():
+def version(msg):
     print("---version", msg.topic, msg.payload)
 
 @app.route("$SYS/broker/uptime")
