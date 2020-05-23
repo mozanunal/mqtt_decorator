@@ -12,7 +12,7 @@ def on_connect(client, mqtt_api, flags, rc):
 def on_message(client, mqtt_api, msg):
     for topic, route in mqtt_api.routes.items():
         if mqtt.topic_matches_sub(topic, msg.topic):
-            route.func(msg)
+            route.exec(msg)
 
 
 class MqttApi(object):
@@ -32,7 +32,6 @@ class MqttApi(object):
         def decorator(callback_function):
             route = Route(route_path, callback_function, qos=qos)
             self.routes[route.topic] = route
-            print(route)
         return decorator
     
 
