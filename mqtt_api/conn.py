@@ -29,6 +29,16 @@ class MqttApi(object):
 
 
     def route(self, route_path, qos=2):
+        """Decorator to create routes
+
+        Arguments:
+            route_path {str} -- string mqtt route
+            formatted like Flask route 
+
+        Keyword Arguments:
+            qos {int} -- Quality of service. Please see mqtt
+            documentation further details (default: {2})
+        """
         def decorator(callback_function):
             route = Route(route_path, callback_function, qos=qos)
             self.routes[route.topic] = route
@@ -36,6 +46,12 @@ class MqttApi(object):
     
 
     def run(self, host, port):
+        """Runs the mqtt api. It blocks forever.
+
+        Arguments:
+            host {str} -- mqtt host to connect
+            port {int} -- mqtt port to connect
+        """
         self.mqtt_client.connect(
             host, port, 60
         )

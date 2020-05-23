@@ -6,6 +6,24 @@ import inspect
 
 class Route(object):
     def __init__(self, url, func, qos=2):
+        """Route class to handle and verify routes
+        available options:
+        - "$SYS/broker/version"
+        - "$SYS/<broker>/<type>"
+        - "$SYS/broker/+"
+        - "$SYS/#"
+        It also stores the function which will be
+        exevuted when a new message is arrived from
+        mqtt.
+
+        Arguments:
+            url {str} -- url in format mqtt_api routes
+            func {function} -- function to executed when the
+            package is arrived
+
+        Keyword Arguments:
+            qos {int} -- QOS (default: {2})
+        """
         self.url = url
         self.topic = Route.url_to_topic(url)
         self.args = Route.url_to_args(url)
