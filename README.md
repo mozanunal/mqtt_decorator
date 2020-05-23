@@ -14,10 +14,11 @@ import paho.mqtt.client as mqtt
 mqttc = mqtt.Client(clean_session=True)
 app = MqttApi(mqttc)
 
-
-@app.route("$SYS/broker/+")
-def broker_multi(msg):
-    print("---broker_multi", msg.topic, msg.payload)
+@app.route("$SYS/<broker>/<type>")
+def broker_url_params(msg, broker, type):
+    print("---broker_url_params", msg.topic, msg.payload)
+    print("--broker", broker)
+    print("--type", type)
 
 @app.route("$SYS/broker/version")
 def version(msg):
@@ -30,4 +31,5 @@ def uptime(msg):
 
 if __name__ == "__main__":
     app.run( "mqtt.eclipse.org", 1883 )
+
 ```
