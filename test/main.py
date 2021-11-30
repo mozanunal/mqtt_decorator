@@ -24,7 +24,7 @@ def uptime(msg):
 
 
 if __name__ == "__main__":
-    app.run( "mqtt.eclipse.org", 1883 )
+    app.run( "localhost", 1883 )
 
     
 

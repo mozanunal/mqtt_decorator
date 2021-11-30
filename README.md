@@ -37,14 +37,29 @@ if __name__ == "__main__":
 ### Installing
 
 
+
+
 ### Development
+
+Create virtual environment (It should be done only for first installation)
+
+```
+conda create -n py38 python=3.8
+```
+
+Activate virtual environment
+```
+conda activate py38
+```
+
+Install this package
+```
+pip install -e .
+```
 
 
 ### Deployment
 
-```
-pip install -e .
-```
 
 ### Licence
 
