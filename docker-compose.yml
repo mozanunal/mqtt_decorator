@@ -1,0 +1,17 @@
+
+version: '3'
+services:
+    mosquitto:
+        image: eclipse-mosquitto:1.6.11
+        ports:
+        - ${TEST_MQTT_PORT}:1883
+        - ${TEST_MQTT_WS_PORT}:8883
+        volumes:
+        - mosquitto-data:/mosquitto/data
+        - mosquitto-logs:/mosquitto/logs
+        - mosquitto-conf:/mosquitto/config
+
+volumes:
+    mosquitto-data:
+    mosquitto-logs:
+    mosquitto-conf:

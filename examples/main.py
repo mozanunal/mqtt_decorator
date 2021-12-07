@@ -24,7 +24,16 @@ def uptime(msg):
 
 
 if __name__ == "__main__":
-    app.run( "localhost", 1883 )
+    
+    import os
+    from dotenv import load_dotenv
+
+    load_dotenv()
+    
+    app.run( 
+        os.environ['TEST_MQTT_HOST'], 
+        int(os.environ['TEST_MQTT_PORT'] )
+    )
 
     
 
