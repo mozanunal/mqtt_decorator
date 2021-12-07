@@ -22,7 +22,7 @@ jobs:
     - name: Checking the formating with autopep8
       id: step-autopep8
       run: |
-        autopep8 -r img2sh --diff
+        autopep8 -r mqtt_decorator --diff
     - name: Fail if autopep8 made changes
       if: steps.step-autopep8.outputs.exit-code == 2
       run: exit 1

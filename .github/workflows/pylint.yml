@@ -21,4 +21,4 @@ jobs:
         pip install -r requirements-dev.txt
     - name: Analysing the code with pylint
       run: |
-        pylint img2sh --fail-under=9
+        pylint mqtt_decorator --fail-under=9
