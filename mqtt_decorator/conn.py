@@ -4,10 +4,12 @@ from functools import wraps
 
 from .route import Route
 
+
 def on_connect(client, mqtt_api, flags, rc):
     print("Connected with result code "+str(rc))
     for topic, route in mqtt_api.routes.items():
         client.subscribe(topic)
+
 
 def on_message(client, mqtt_api, msg):
     for topic, route in mqtt_api.routes.items():
@@ -66,7 +68,6 @@ class MqttDecorator(object):
         self.mqtt_client.on_connect = on_connect
         self.mqtt_client.on_message = on_message
 
-
     def route(self, route_path, qos=2):
         """Decorator to create routes
 
@@ -82,7 +83,6 @@ class MqttDecorator(object):
             route = Route(route_path, callback_function, qos=qos)
             self.routes[route.topic] = route
         return decorator
-    
 
     def run(self, host, port):
         """Runs the mqtt api. It blocks forever.

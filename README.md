@@ -60,9 +60,21 @@ pip install -e .
 
 ### Deployment
 
+In this repo issue based development is active. For any problems or new enhancements please open a issue.
+
+Autopep8 is used for formatting.
+
+```
+autopep8 -r -i mqtt_decorator test
+```
+
+Pylint is used for linting.
+```
+pylint mqtt_decorator
+```
 
 ### Licence
-
+MIT
 
 ### Acknowledges
 This package is developed using
@@ -70,3 +82,7 @@ This package is developed using
 - Paho-Mqtt
 Heavily inspired from
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+
+### Contributors
+- [mozanunal](https://github.com/mozanunal)
+

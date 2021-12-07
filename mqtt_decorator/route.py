@@ -40,10 +40,12 @@ class Route(object):
             msg {paho.mqtt.client.MQTTMessage} -- received mqtt message
         """
         msg_topic_parsed = msg.topic.split("/")
-        func_args = { key:self._find_arg_value(key, msg_topic_parsed) for key in self.args }
+        func_args = {
+            key: self._find_arg_value(key, msg_topic_parsed)
+            for key in self.args}
         func_args["msg"] = msg
         self.func(**func_args)
-        
+
     def _check_func(self):
         """Check the structure of the 
         callback function.
@@ -74,10 +76,6 @@ class Route(object):
         idx = self._url_parsed.index("<{}>".format(arg))
         return msg_topic_parsed[idx]
 
-
-
-        
-
     def __repr__(self):
         return json.dumps(self.__dict__, default=str)
 
@@ -96,4 +94,3 @@ class Route(object):
     def url_to_topic(url):
         topic = re.sub("<(.*?)>", "+", url)
         return topic
-

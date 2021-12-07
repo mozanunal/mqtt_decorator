@@ -1,2 +1,6 @@
+twine
+autopep8
+pylint
 pytest
+sphinx
 python-dotenv
