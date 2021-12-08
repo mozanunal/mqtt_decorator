@@ -3,6 +3,7 @@
 import re
 import json
 import inspect
+from typing import Callable
 import paho.mqtt.client as mqtt
 
 
@@ -18,7 +19,7 @@ class Route():
     mqtt.
     """
 
-    def __init__(self, url: str, func: function, qos=2) -> None:
+    def __init__(self, url: str, func: Callable, qos=2) -> None:
         """Route init
 
         Args:

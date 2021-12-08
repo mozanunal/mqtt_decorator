@@ -1,6 +1,7 @@
 """mqtt decorator module which handles
 routing and mqtt connection
 """
+from typing import Callable
 import paho.mqtt.client as mqtt
 from .route import Route
 
@@ -64,7 +65,7 @@ class MqttDecorator():
         self.mqtt_client.on_connect = on_connect
         self.mqtt_client.on_message = on_message
 
-    def route(self, route_path: str, qos=2) -> function:
+    def route(self, route_path: str, qos=2) -> Callable:
         """Decorator to create routes
 
         Arguments:
