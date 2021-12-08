@@ -1,4 +1,8 @@
 # mqtt_decorator
+[![autopep8](https://github.com/mozanunal/mqtt_decorator/actions/workflows/autopep8.yml/badge.svg)](https://github.com/mozanunal/mqtt_decorator/actions/workflows/autopep8.yml)
+[![pylint](https://github.com/mozanunal/mqtt_decorator/actions/workflows/pylint.yml/badge.svg)](https://github.com/mozanunal/mqtt_decorator/actions/workflows/pylint.yml)
+[![pytest](https://github.com/mozanunal/mqtt_decorator/actions/workflows/pytest.yml/badge.svg)](https://github.com/mozanunal/mqtt_decorator/actions/workflows/pytest.yml)
+
 mqtt_decorator is a decorator module which converts mqtt subscriptions and messages to a [Flask](https://flask.palletsprojects.com/en/1.1.x/) like api.
 
 ### Demo
@@ -60,9 +64,33 @@ pip install -e .
 
 ### Deployment
 
+In this repo issue based development is active. For any problems or new enhancements please open a issue.
+
+Autopep8 is used for formatting.
+
+```
+autopep8 -r -i mqtt_decorator test
+```
+
+Pylint is used for linting.
+```
+pylint mqtt_decorator
+```
+
+### Docs
+
+for the first time
+```
+sphinx-apidoc -F mqtt_decorator -o docs/source
+```
+
+just update the auto docs
+```
+sphinx-apidoc -f mqtt_decorator -o docs/source
+```
 
 ### Licence
-
+MIT
 
 ### Acknowledges
 This package is developed using
@@ -70,3 +98,7 @@ This package is developed using
 - Paho-Mqtt
 Heavily inspired from
 - [Flask](https://flask.palletsprojects.com/en/1.1.x/)
+
+### Contributors
+- [mozanunal](https://github.com/mozanunal)
+
