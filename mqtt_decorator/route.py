@@ -3,6 +3,7 @@
 import re
 import json
 import inspect
+import paho.mqtt.client as mqtt
 
 
 class Route():
@@ -16,7 +17,8 @@ class Route():
     exevuted when a new message is arrived from
     mqtt.
     """
-    def __init__(self, url, func, qos=2):
+
+    def __init__(self, url: str, func: function, qos=2) -> None:
         """Route init
 
         Args:
@@ -34,11 +36,11 @@ class Route():
         self._url_parsed = self.url.split("/")
         self._check_func()
 
-    def exec(self, msg):
+    def exec(self, msg: mqtt.MQTTMessage) -> None:
         """Gets only mqtt msg as argument
 
-        Arguments:
-            msg {paho.mqtt.client.MQTTMessage} -- received mqtt message
+        Args:
+            msg (mqtt.MQTTMessage): received mqtt message
         """
         msg_topic_parsed = msg.topic.split("/")
         func_args = {
@@ -47,7 +49,7 @@ class Route():
         func_args["msg"] = msg
         self.func(**func_args)
 
-    def _check_func(self):
+    def _check_func(self) -> None:
         """Check the structure of the
         callback function.
         - Check the arguments are correct
@@ -65,7 +67,7 @@ class Route():
                 error_msg += f"url: {self.url} "
                 raise AttributeError(error_msg)
 
-    def _find_arg_value(self, arg, msg_topic_parsed):
+    def _find_arg_value(self, arg: str, msg_topic_parsed: list) -> str:
         """Get value from topic string
 
         Args:
@@ -82,7 +84,7 @@ class Route():
         return json.dumps(self.__dict__, default=str)
 
     @staticmethod
-    def url_to_args(url):
+    def url_to_args(url: str) -> list:
         """converts mqtt_decorator url to args
 
         Args:
@@ -95,7 +97,7 @@ class Route():
         return args
 
     @staticmethod
-    def url_to_topic(url):
+    def url_to_topic(url: str) -> str:
         """converts mqtt_decorator to topic
 
         Args:
