@@ -5,32 +5,9 @@ import paho.mqtt.client as mqtt
 from .route import Route
 
 
-def on_connect(client, mqtt_api, __flags, received_code):
-    """the function when the client connected
-
-    Args:
-        client (mqtt.Client): mqtt client
-        mqtt_api (MqttDecorator): the decorator object
-        __flags (list): list of flags
-        received_code (int): mqtt status code
-    """
-    print("Connected with result code "+str(received_code))
-    for topic, _ in mqtt_api.routes.items():
-        client.subscribe(topic)
-
-
-def on_message(__client, mqtt_api, msg):
-    """the function runs when the new message received
-
-    Args:
-        __client (mqtt.Client): mqtt client
-        mqtt_api (MqttDecorator): the decorator object
-        msg (mqtt.message): received mqtt message
-    """
-    for topic, route in mqtt_api.routes.items():
-        if mqtt.topic_matches_sub(topic, msg.topic):
-            route.exec(msg)
-
+###########################
+##### MqttDecorator #######
+###########################
 
 class MqttDecorator():
     """Mqtt Decorator is the class which convert mqtt
@@ -70,7 +47,8 @@ class MqttDecorator():
 
     ```
     """
-    def __init__(self, mqtt_client):
+
+    def __init__(self, mqtt_client: mqtt.Client) -> None:
         """Mqtt Decorator is the class which convert mqtt
         subscriptions to a Flask like api.
 
@@ -86,7 +64,7 @@ class MqttDecorator():
         self.mqtt_client.on_connect = on_connect
         self.mqtt_client.on_message = on_message
 
-    def route(self, route_path, qos=2):
+    def route(self, route_path: str, qos=2) -> function:
         """Decorator to create routes
 
         Arguments:
@@ -102,7 +80,7 @@ class MqttDecorator():
             self.routes[route.topic] = route
         return decorator
 
-    def run(self, host, port):
+    def run(self, host: str, port: int) -> None:
         """Runs the mqtt api. It blocks forever.
 
         Arguments:
@@ -113,3 +91,34 @@ class MqttDecorator():
             host, port, 60
         )
         self.mqtt_client.loop_forever()
+
+
+###########################
+##### CALLBACKS ###########
+###########################
+
+def on_connect(client: mqtt.Client, mqtt_api: MqttDecorator, __flags, received_code: int) -> None:
+    """the function when the client connected
+
+    Args:
+        client (mqtt.Client): mqtt client
+        mqtt_api (MqttDecorator): the decorator object
+        __flags (list): list of flags
+        received_code (int): mqtt status code
+    """
+    print("Connected with result code "+str(received_code))
+    for topic, _ in mqtt_api.routes.items():
+        client.subscribe(topic)
+
+
+def on_message(__client: mqtt.Client, mqtt_api: MqttDecorator, msg: mqtt.MQTTMessage) -> None:
+    """the function runs when the new message received
+
+    Args:
+        __client (mqtt.Client): mqtt client
+        mqtt_api (MqttDecorator): the decorator object
+        msg (mqtt.MQTTMessage): received mqtt message
+    """
+    for topic, route in mqtt_api.routes.items():
+        if mqtt.topic_matches_sub(topic, msg.topic):
+            route.exec(msg)
