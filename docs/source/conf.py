@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'mqtt_decorator'
-copyright = '2021, mozanunal'
-author = 'mozanunal'
+copyright = '2021, Author'
+author = 'Author'
 
 
 # -- General configuration ---------------------------------------------------

@@ -79,8 +79,14 @@ pylint mqtt_decorator
 
 ### Docs
 
+for the first time
 ```
-sphinx-apidoc -F mqtt_decorator -o doc
+sphinx-apidoc -F mqtt_decorator -o docs/source
+```
+
+just update the auto docs
+```
+sphinx-apidoc -f mqtt_decorator -o docs/source
 ```
 
 ### Licence

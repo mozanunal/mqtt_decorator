@@ -1,6 +1,4 @@
-"""mqtt decorator module which handles
-routing and mqtt connection
-"""
+"""mqtt decorator module which handles routing and mqtt connection"""
 from typing import Callable
 import paho.mqtt.client as mqtt
 from .route import Route
