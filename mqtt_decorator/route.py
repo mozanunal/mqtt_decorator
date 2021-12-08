@@ -1,28 +1,29 @@
-
+"""module for route class
+"""
 import re
 import json
 import inspect
 
 
-class Route(object):
+class Route():
+    """Route class to handle and verify routes
+    available options:
+    - "$SYS/broker/version"
+    - "$SYS/<broker>/<type>"
+    - "$SYS/broker/+"
+    - "$SYS/#"
+    It also stores the function which will be
+    exevuted when a new message is arrived from
+    mqtt.
+    """
     def __init__(self, url, func, qos=2):
-        """Route class to handle and verify routes
-        available options:
-        - "$SYS/broker/version"
-        - "$SYS/<broker>/<type>"
-        - "$SYS/broker/+"
-        - "$SYS/#"
-        It also stores the function which will be
-        exevuted when a new message is arrived from
-        mqtt.
+        """Route init
 
-        Arguments:
-            url {str} -- url in format mqtt_api routes
-            func {function} -- function to executed when the
+        Args:
+            url (str): url in format mqtt_api routes
+            func (function): function to executed when the
             package is arrived
-
-        Keyword Arguments:
-            qos {int} -- QOS (default: {2})
+            qos (int, optional): QOS. Defaults to 2.
         """
         self.url = url
         self.topic = Route.url_to_topic(url)
@@ -34,7 +35,7 @@ class Route(object):
         self._check_func()
 
     def exec(self, msg):
-        """Gets only mqtt msg as argument 
+        """Gets only mqtt msg as argument
 
         Arguments:
             msg {paho.mqtt.client.MQTTMessage} -- received mqtt message
@@ -47,10 +48,9 @@ class Route(object):
         self.func(**func_args)
 
     def _check_func(self):
-        """Check the structure of the 
+        """Check the structure of the
         callback function.
         - Check the arguments are correct
-
 
         Raises:
             AttributeError: it raises if the
@@ -58,39 +58,51 @@ class Route(object):
             correct
         """
         # check arguments
-        func_info = inspect.getargspec(self.func)
+        func_info = inspect.getfullargspec(self.func)
         for arg in self.args:
             if arg not in func_info.args:
                 error_msg = "Arguments are not correct! "
-                error_msg += "url: {} ".format(self.url)
+                error_msg += f"url: {self.url} "
                 raise AttributeError(error_msg)
 
     def _find_arg_value(self, arg, msg_topic_parsed):
         """Get value from topic string
 
-        Arguments:
-            arg {str} -- function argument key
-            msg_topic_parsed {list} -- received message topic parsed
-            with "\" 
+        Args:
+            arg (str): function argument key
+            msg_topic_parsed (list): received message topic parsed
+
+        Returns:
+            str: the value of the argument
         """
-        idx = self._url_parsed.index("<{}>".format(arg))
+        idx = self._url_parsed.index(f"<{arg}>")
         return msg_topic_parsed[idx]
 
     def __repr__(self):
         return json.dumps(self.__dict__, default=str)
 
-    # def func_wrapper(self, func):
-    #     def route_callback(msg):
-    #         #func.globals.update({'msg':msg})
-    #         return func()
-    #     return route_callback
-
     @staticmethod
     def url_to_args(url):
+        """converts mqtt_decorator url to args
+
+        Args:
+            url (str): mqtt_decorator url
+
+        Returns:
+            list: args
+        """
         args = re.findall("<(.*?)>", url)
         return args
 
     @staticmethod
     def url_to_topic(url):
+        """converts mqtt_decorator to topic
+
+        Args:
+            url (str): mqtt_decorator url
+
+        Returns:
+            str: generated mqtt topic
+        """
         topic = re.sub("<(.*?)>", "+", url)
         return topic

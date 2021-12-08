@@ -1,63 +1,81 @@
-
+"""mqtt decorator module which handles
+routing and mqtt connection
+"""
 import paho.mqtt.client as mqtt
-from functools import wraps
-
 from .route import Route
 
 
-def on_connect(client, mqtt_api, flags, rc):
-    print("Connected with result code "+str(rc))
-    for topic, route in mqtt_api.routes.items():
+def on_connect(client, mqtt_api, __flags, received_code):
+    """the function when the client connected
+
+    Args:
+        client (mqtt.Client): mqtt client
+        mqtt_api (MqttDecorator): the decorator object
+        __flags (list): list of flags
+        received_code (int): mqtt status code
+    """
+    print("Connected with result code "+str(received_code))
+    for topic, _ in mqtt_api.routes.items():
         client.subscribe(topic)
 
 
-def on_message(client, mqtt_api, msg):
+def on_message(__client, mqtt_api, msg):
+    """the function runs when the new message received
+
+    Args:
+        __client (mqtt.Client): mqtt client
+        mqtt_api (MqttDecorator): the decorator object
+        msg (mqtt.message): received mqtt message
+    """
     for topic, route in mqtt_api.routes.items():
         if mqtt.topic_matches_sub(topic, msg.topic):
             route.exec(msg)
 
 
-class MqttDecorator(object):
+class MqttDecorator():
+    """Mqtt Decorator is the class which convert mqtt
+    subscriptions to a Flask like api.
+
+    mqtt_decorator is a decorator module which converts
+    mqtt subscriptions and messages to a Flask like api.
+
+    ```python
+    from mqttdecorator import MqttDecorator
+    import paho.mqtt.client as mqtt
+
+    # you can specify all
+    # paho mqtt client options
+    # such as websocket connections or
+    # tls connections
+    mqttc = mqtt.Client(clean_session=True)
+    app = MqttDecorator(mqttc)
+
+    @app.route("$SYS/<broker>/<type>")
+    def broker_url_params(msg, broker, type):
+        print("---broker_url_params", msg.topic, msg.payload)
+        print("--broker", broker)
+        print("--type", type)
+
+    @app.route("$SYS/broker/version")
+    def version(msg):
+        print("---version", msg.topic, msg.payload)
+
+    @app.route("$SYS/broker/uptime")
+    def uptime(msg):
+        print("---uptime", msg.topic, msg.payload)
+
+
+    if __name__ == "__main__":
+        app.run( "mqtt.eclipse.org", 1883 )
+
+    ```
+    """
     def __init__(self, mqtt_client):
         """Mqtt Decorator is the class which convert mqtt
-        subscriptions to a Flask like api. 
+        subscriptions to a Flask like api.
 
-        Arguments:
-            mqtt_client {paho.mqtt.client.Client} -- [description]
-
-        mqtt_decorator is a decorator module which converts 
-        mqtt subscriptions and messages to a Flask like api.
-
-        ```python
-        from mqttdecorator import MqttDecorator
-        import paho.mqtt.client as mqtt
-
-        # you can specify all 
-        # paho mqtt client options
-        # such as websocket connections or
-        # tls connections
-        mqttc = mqtt.Client(clean_session=True)
-        app = MqttDecorator(mqttc)
-
-        @app.route("$SYS/<broker>/<type>")
-        def broker_url_params(msg, broker, type):
-            print("---broker_url_params", msg.topic, msg.payload)
-            print("--broker", broker)
-            print("--type", type)
-
-        @app.route("$SYS/broker/version")
-        def version(msg):
-            print("---version", msg.topic, msg.payload)
-
-        @app.route("$SYS/broker/uptime")
-        def uptime(msg):
-            print("---uptime", msg.topic, msg.payload)
-
-
-        if __name__ == "__main__":
-            app.run( "mqtt.eclipse.org", 1883 )
-
-        ```
+        Args:
+            mqtt_client (mqtt.Client): the mqtt client for the subcriptions
         """
         # init routes
         self.routes = {}
@@ -73,7 +91,7 @@ class MqttDecorator(object):
 
         Arguments:
             route_path {str} -- string mqtt route
-            formatted like Flask route 
+            formatted like Flask route
 
         Keyword Arguments:
             qos {int} -- Quality of service. Please see mqtt
