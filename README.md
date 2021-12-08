@@ -77,6 +77,12 @@ Pylint is used for linting.
 pylint mqtt_decorator
 ```
 
+### Docs
+
+```
+sphinx-apidoc -F mqtt_decorator -o doc
+```
+
 ### Licence
 MIT
 
