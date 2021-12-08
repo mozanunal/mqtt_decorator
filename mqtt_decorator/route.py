@@ -53,7 +53,6 @@ class Route():
         func_args["msg"] = msg
         return func_args
 
-
     def exec(self, msg: mqtt.MQTTMessage) -> None:
         """Gets only mqtt msg as argument
 

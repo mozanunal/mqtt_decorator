@@ -5,10 +5,17 @@
 
 mqtt_decorator is a decorator module which converts mqtt subscriptions and messages to a [Flask](https://flask.palletsprojects.com/en/1.1.x/) like api.
 
+### Installing
+
+The package can be installed via pip
+```
+pip install mqtt_decorator
+```
+
 ### Demo
 
 ```python
-from mqttdecorator import MqttDecorator
+from mqtt_decorator import MqttDecorator
 import paho.mqtt.client as mqtt
 
 # you can specify all 
@@ -38,33 +45,26 @@ if __name__ == "__main__":
 
 ```
 
-### Installing
-
-
-
 
 ### Development
+
+In this repo issue based development is active. For any problems or new enhancements please open a issue.
 
 Create virtual environment (It should be done only for first installation)
 
 ```
-conda create -n py38 python=3.8
+conda create -n mqtt_decorator python=3.8
 ```
 
 Activate virtual environment
 ```
-conda activate py38
+conda activate mqtt_decorator
 ```
 
 Install this package
 ```
 pip install -e .
 ```
-
-
-### Deployment
-
-In this repo issue based development is active. For any problems or new enhancements please open a issue.
 
 Autopep8 is used for formatting.
 
@@ -89,8 +89,16 @@ just update the auto docs
 sphinx-apidoc -f mqtt_decorator -o docs/source
 ```
 
+### Deployment
+
+The following 2 commands are required to deploy over pypi.
+```
+python setup.py sdist bdist_wheel
+twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
+```
+
 ### Licence
-MIT
+GPL
 
 ### Acknowledges
 This package is developed using

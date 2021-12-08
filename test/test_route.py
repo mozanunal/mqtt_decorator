@@ -24,9 +24,8 @@ def func_to_arg_tester(url, received_topic, expected_result):
     route = Route(url, lambda hey, yoo: (hey, yoo) )
     msg = MQTTMessage(topic=received_topic)
     result = route.find_func_args(msg)
-    result.pop("msg")
-    assert result == expected_result
+    result
+    assert  == expected_result
 
 def test_find_func_arguments():
     func_to_arg_tester( "test/<hey>/<yoo>", b"test/1/2", {"hey":"1", "yoo": "2"}  )
-    func_to_arg_tester( "test/<hey>/<yoo>", b"test/asd<</sdads", {"hey":"asd<<", "yoo": "sdads"}  )
