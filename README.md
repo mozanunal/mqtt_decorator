@@ -1,4 +1,8 @@
 # mqtt_decorator
+[![autopep8](https://github.com/mozanunal/mqtt_decorator/actions/workflows/autopep8.yml/badge.svg)](https://github.com/mozanunal/mqtt_decorator/actions/workflows/autopep8.yml)
+[![pylint](https://github.com/mozanunal/mqtt_decorator/actions/workflows/pylint.yml/badge.svg)](https://github.com/mozanunal/mqtt_decorator/actions/workflows/pylint.yml)
+[![pytest](https://github.com/mozanunal/mqtt_decorator/actions/workflows/pytest.yml/badge.svg)](https://github.com/mozanunal/mqtt_decorator/actions/workflows/pytest.yml)
+
 mqtt_decorator is a decorator module which converts mqtt subscriptions and messages to a [Flask](https://flask.palletsprojects.com/en/1.1.x/) like api.
 
 ### Demo
