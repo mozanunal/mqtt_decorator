@@ -35,7 +35,24 @@ class Route():
         self.qos = qos
         self._topic_parsed = self.topic.split("/")
         self._url_parsed = self.url.split("/")
-        self._check_func()
+        self.__check_func()
+
+    def find_func_args(self, msg: mqtt.MQTTMessage) -> dict:
+        """find function arguments from the mqtt topic
+
+        Args:
+            msg (mqtt.MQTTMessage): received mqtt msg
+
+        Returns:
+            dict: kw arguments dict for the function
+        """
+        msg_topic_parsed = msg.topic.split("/")
+        func_args = {
+            key: self.__find_arg_value(key, msg_topic_parsed)
+            for key in self.args}
+        func_args["msg"] = msg
+        return func_args
+
 
     def exec(self, msg: mqtt.MQTTMessage) -> None:
         """Gets only mqtt msg as argument
@@ -43,14 +60,9 @@ class Route():
         Args:
             msg (mqtt.MQTTMessage): received mqtt message
         """
-        msg_topic_parsed = msg.topic.split("/")
-        func_args = {
-            key: self._find_arg_value(key, msg_topic_parsed)
-            for key in self.args}
-        func_args["msg"] = msg
-        self.func(**func_args)
+        self.func(**self.find_func_args(msg))
 
-    def _check_func(self) -> None:
+    def __check_func(self) -> None:
         """Check the structure of the
         callback function.
         - Check the arguments are correct
@@ -68,7 +80,7 @@ class Route():
                 error_msg += f"url: {self.url} "
                 raise AttributeError(error_msg)
 
-    def _find_arg_value(self, arg: str, msg_topic_parsed: list) -> str:
+    def __find_arg_value(self, arg: str, msg_topic_parsed: list) -> str:
         """Get value from topic string
 
         Args:
